@@ -1,20 +1,17 @@
 pub mod instruction;
 
-use crate::instruction::*;
-
-struct Cpu
-{
-    reg_a:      u8,
-    reg_x:      u8,
-    reg_y:      u8,
-    
-    pc:         u16,
-    sp:         u8,
-    status:     u8,
-
-    memory:     Vec<u8>
+fn le2be(val: &u16) -> u16 {
+    let mut ret: u16 = 0;
+    ret = val & 0x00FF;
+    ret << 8;
+    ret |= val >> 8;
+    return ret;
 }
 
 fn main() {
-    println!("Hello, world!");
+    let a:u16 = 0xffff;
+    let b:i8 = -127;
+    let c:i32 = (a as i32) + ( b as i32);
+
+    println!("Result {}", c);
 }
