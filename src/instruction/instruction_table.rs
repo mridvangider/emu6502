@@ -14,10 +14,12 @@ use super::arithmetic::{
 };
 use super::bitwise::{
     and,
+    ora,
+    eor,
 };
 
 
-pub const MNEMONICS: [Mnemonic;36] = [
+pub const MNEMONICS: [Mnemonic;52] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -63,4 +65,22 @@ pub const MNEMONICS: [Mnemonic;36] = [
     Mnemonic { name:"AND", opcode: 0x35, addr_mode: AddressingMode::ZeroPageIndexedX, func: and},
     Mnemonic { name:"AND", opcode: 0x39, addr_mode: AddressingMode::AbsoluteIndexedY, func: and},
     Mnemonic { name:"AND", opcode: 0x3D, addr_mode: AddressingMode::AbsoluteIndexedX, func: and},
+    // MNEMONIC:ORA
+    Mnemonic { name:"ORA", opcode: 0x01, addr_mode: AddressingMode::IndexedIndirect, func: ora},
+    Mnemonic { name:"ORA", opcode: 0x05, addr_mode: AddressingMode::ZeroPage, func: ora},
+    Mnemonic { name:"ORA", opcode: 0x09, addr_mode: AddressingMode::Immediate, func: ora},
+    Mnemonic { name:"ORA", opcode: 0x0D, addr_mode: AddressingMode::Absolute, func: ora},
+    Mnemonic { name:"ORA", opcode: 0x11, addr_mode: AddressingMode::IndirectIndexed, func: ora},
+    Mnemonic { name:"ORA", opcode: 0x15, addr_mode: AddressingMode::ZeroPageIndexedX, func: ora},
+    Mnemonic { name:"ORA", opcode: 0x19, addr_mode: AddressingMode::AbsoluteIndexedY, func: ora},
+    Mnemonic { name:"ORA", opcode: 0x1D, addr_mode: AddressingMode::AbsoluteIndexedX, func: ora},
+    // MNEMONIC:EOR
+    Mnemonic { name:"EOR", opcode: 0x01, addr_mode: AddressingMode::IndexedIndirect, func: eor},
+    Mnemonic { name:"EOR", opcode: 0x05, addr_mode: AddressingMode::ZeroPage, func: eor},
+    Mnemonic { name:"EOR", opcode: 0x09, addr_mode: AddressingMode::Immediate, func: eor},
+    Mnemonic { name:"EOR", opcode: 0x0D, addr_mode: AddressingMode::Absolute, func: eor},
+    Mnemonic { name:"EOR", opcode: 0x11, addr_mode: AddressingMode::IndirectIndexed, func: eor},
+    Mnemonic { name:"EOR", opcode: 0x15, addr_mode: AddressingMode::ZeroPageIndexedX, func: eor},
+    Mnemonic { name:"EOR", opcode: 0x19, addr_mode: AddressingMode::AbsoluteIndexedY, func: eor},
+    Mnemonic { name:"EOR", opcode: 0x1D, addr_mode: AddressingMode::AbsoluteIndexedX, func: eor},
     ];
