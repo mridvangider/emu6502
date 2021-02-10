@@ -8,7 +8,7 @@ use super::arithmetic::{
     inc
 };
 
-const mnenomics: [Mnemonic;20] = [ 
+const mnemomics: [Mnemonic;20] = [ 
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
     Mnemonic { name:"ADC", opcode: 0x69, addr_mode: AddressingMode::Immediate, func: add},
