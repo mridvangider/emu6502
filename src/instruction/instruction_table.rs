@@ -18,12 +18,12 @@ use super::bitwise::{
     eor,
     asl,
     lsr,
-    //rol,
-    //ror,
+    rol,
+    ror,
 };
 
 
-pub const MNEMONICS: [Mnemonic;62] = [
+pub const MNEMONICS: [Mnemonic;72] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -99,4 +99,17 @@ pub const MNEMONICS: [Mnemonic;62] = [
     Mnemonic { name:"LSR", opcode: 0x4E, addr_mode: AddressingMode::Absolute, func: lsr},
     Mnemonic { name:"LSR", opcode: 0x56, addr_mode: AddressingMode::ZeroPageIndexedX, func: lsr},
     Mnemonic { name:"LSR", opcode: 0x5E, addr_mode: AddressingMode::AbsoluteIndexedX, func: lsr},
+    // MNEMONIC:ROL
+    Mnemonic { name:"ROL", opcode: 0x26, addr_mode: AddressingMode::ZeroPage, func: rol},
+    Mnemonic { name:"ROL", opcode: 0x2A, addr_mode: AddressingMode::Accumulator, func: rol},
+    Mnemonic { name:"ROL", opcode: 0x2E, addr_mode: AddressingMode::Absolute, func: rol},
+    Mnemonic { name:"ROL", opcode: 0x36, addr_mode: AddressingMode::ZeroPageIndexedX, func: rol},
+    Mnemonic { name:"ROL", opcode: 0x3E, addr_mode: AddressingMode::AbsoluteIndexedX, func: rol},
+    // MNEMONIC:ROR
+    Mnemonic { name:"ROR", opcode: 0x66, addr_mode: AddressingMode::ZeroPage, func: ror},
+    Mnemonic { name:"ROR", opcode: 0x6A, addr_mode: AddressingMode::Accumulator, func: ror},
+    Mnemonic { name:"ROR", opcode: 0x6E, addr_mode: AddressingMode::Absolute, func: ror},
+    Mnemonic { name:"ROR", opcode: 0x76, addr_mode: AddressingMode::ZeroPageIndexedX, func: ror},
+    Mnemonic { name:"ROR", opcode: 0x7E, addr_mode: AddressingMode::AbsoluteIndexedX, func: ror},
+    
     ];
