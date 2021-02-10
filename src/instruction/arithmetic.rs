@@ -9,7 +9,7 @@ use super::util::{
 
 };
 
-pub fn add(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &Memory, mode: AddressingMode) {
+pub fn add(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
     match mode {
         AddressingMode::Immediate => {
             if let Operand::Byte(val) = op {
@@ -73,7 +73,7 @@ pub fn add(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &m
     }
 }
 
-pub fn sub(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &Memory, mode: AddressingMode) {
+pub fn sub(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
     match mode {
         AddressingMode::Immediate => {
             if let Operand::Byte(val) = op {
@@ -131,6 +131,23 @@ pub fn sub(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &m
                 }
 
                 *stat |= FLAG_NEGATIVE & *reg_a;
+            }
+        },
+        _ => {}
+    }
+}
+
+pub fn inc(_reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
+    match mode {
+        AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
+            if let Option::Some(addr) = calculate_address(op, reg_x, reg_y, pc, mem, mode) {
+                mem[addr] += 1;
+                
+                if mem[addr] == 0 {
+                    *stat |= FLAG_ZERO;
+                }
+
+                *stat |= FLAG_NEGATIVE & mem[addr];
             }
         },
         _ => {}

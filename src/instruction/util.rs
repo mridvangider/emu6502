@@ -1,5 +1,5 @@
 pub type Memory = Vec<u8>;
-pub type OperationFunction = fn (&mut u8, &mut u8, &mut u8, &mut u16, &mut u8, &mut u8, &Operand, &Memory, mode: AddressingMode);
+pub type OperationFunction = fn (&mut u8, &mut u8, &mut u8, &mut u16, &mut u8, &mut u8, &Operand, &mut Memory, mode: AddressingMode);
 
 #[derive(PartialEq)]
 pub enum OperandType {
