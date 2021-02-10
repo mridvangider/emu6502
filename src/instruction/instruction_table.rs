@@ -21,9 +21,14 @@ use super::bitwise::{
     rol,
     ror,
 };
+use super::comparison::{
+    cmp,
+    cpx,
+    cpy,
+};
 
 
-pub const MNEMONICS: [Mnemonic;72] = [
+pub const MNEMONICS: [Mnemonic;86] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -111,5 +116,21 @@ pub const MNEMONICS: [Mnemonic;72] = [
     Mnemonic { name:"ROR", opcode: 0x6E, addr_mode: AddressingMode::Absolute, func: ror},
     Mnemonic { name:"ROR", opcode: 0x76, addr_mode: AddressingMode::ZeroPageIndexedX, func: ror},
     Mnemonic { name:"ROR", opcode: 0x7E, addr_mode: AddressingMode::AbsoluteIndexedX, func: ror},
-    
+    // MNEMONIC:CMP
+    Mnemonic { name:"CMP", opcode: 0xC1, addr_mode: AddressingMode::IndexedIndirect, func: cmp},
+    Mnemonic { name:"CMP", opcode: 0xC5, addr_mode: AddressingMode::ZeroPage, func: cmp },
+    Mnemonic { name:"CMP", opcode: 0xC9, addr_mode: AddressingMode::Immediate, func: cmp},
+    Mnemonic { name:"CMP", opcode: 0xCD, addr_mode: AddressingMode::Absolute, func: cmp},
+    Mnemonic { name:"CMP", opcode: 0xD1, addr_mode: AddressingMode::IndirectIndexed, func: cmp},
+    Mnemonic { name:"CMP", opcode: 0xD5, addr_mode: AddressingMode::ZeroPageIndexedX, func: cmp},
+    Mnemonic { name:"CMP", opcode: 0xD9, addr_mode: AddressingMode::AbsoluteIndexedY, func: cmp},
+    Mnemonic { name:"CMP", opcode: 0xDD, addr_mode: AddressingMode::AbsoluteIndexedX, func: cmp},
+    // MNEMONIC:CPX
+    Mnemonic { name:"CPX", opcode: 0xE0, addr_mode: AddressingMode::Immediate, func: cpx},
+    Mnemonic { name:"CPX", opcode: 0xE4, addr_mode: AddressingMode::ZeroPage, func: cpx},
+    Mnemonic { name:"CPX", opcode: 0xEC, addr_mode: AddressingMode::Absolute, func: cpx},
+    // MNEMONIC:CPY
+    Mnemonic { name:"CPY", opcode: 0xC0, addr_mode: AddressingMode::Immediate, func: cpy},
+    Mnemonic { name:"CPY", opcode: 0xC4, addr_mode: AddressingMode::ZeroPage, func: cpy},
+    Mnemonic { name:"CPY", opcode: 0xCC, addr_mode: AddressingMode::Absolute, func: cpy},
     ];
