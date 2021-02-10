@@ -165,3 +165,15 @@ pub fn inx(_reg_a: &mut u8, reg_x: &mut u8, _reg_y: &mut u8, _pc: &mut u16, _sp:
         *stat |= FLAG_NEGATIVE & *reg_x;
     }
 }
+
+pub fn iny(_reg_a: &mut u8, _reg_x: &mut u8, reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, stat: &mut u8, _op: &Operand, _mem: &mut Memory, mode: AddressingMode) {
+    if mode == AddressingMode::Implied {
+        *reg_y = reg_y.wrapping_add(1);
+
+        if *reg_y == 0 {
+            *stat |= FLAG_ZERO;
+        }
+
+        *stat |= FLAG_NEGATIVE & *reg_y;
+    }
+}
