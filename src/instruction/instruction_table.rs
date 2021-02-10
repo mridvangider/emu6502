@@ -8,9 +8,12 @@ use super::arithmetic::{
     inc,
     inx,
     iny,
+    dec,
+    dex,
+    dey,
 };
 
-const mnemonics: [Mnemonic;22] = [
+const mnemonics: [Mnemonic;28] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -38,4 +41,13 @@ const mnemonics: [Mnemonic;22] = [
     Mnemonic { name:"INX", opcode: 0xE8, addr_mode: AddressingMode::Implied, func: inx},
     // MNEMONIC:INY
     Mnemonic { name:"INY", opcode: 0xC8, addr_mode: AddressingMode::Implied, func: iny},
+    // MNEMONIC:INC
+    Mnemonic { name:"DEC", opcode: 0xC6, addr_mode: AddressingMode::ZeroPage, func: dec},
+    Mnemonic { name:"DEC", opcode: 0xCE, addr_mode: AddressingMode::Absolute, func: dec},
+    Mnemonic { name:"DEC", opcode: 0xD6, addr_mode: AddressingMode::ZeroPageIndexedX, func: dec},
+    Mnemonic { name:"DEC", opcode: 0xDE, addr_mode: AddressingMode::AbsoluteIndexedX, func: dec},
+    // MNEMONIC:INX
+    Mnemonic { name:"DEX", opcode: 0xCA, addr_mode: AddressingMode::Implied, func: dex},
+    // MNEMONIC:INY
+    Mnemonic { name:"DEY", opcode: 0x88, addr_mode: AddressingMode::Implied, func: dey},
     ];
