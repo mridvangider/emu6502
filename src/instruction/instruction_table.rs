@@ -12,9 +12,12 @@ use super::arithmetic::{
     dex,
     dey,
 };
+use super::bitwise::{
+    and,
+};
 
 
-pub const MNEMONICS: [Mnemonic;28] = [
+pub const MNEMONICS: [Mnemonic;36] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -42,13 +45,22 @@ pub const MNEMONICS: [Mnemonic;28] = [
     Mnemonic { name:"INX", opcode: 0xE8, addr_mode: AddressingMode::Implied, func: inx},
     // MNEMONIC:INY
     Mnemonic { name:"INY", opcode: 0xC8, addr_mode: AddressingMode::Implied, func: iny},
-    // MNEMONIC:INC
+    // MNEMONIC:DEC
     Mnemonic { name:"DEC", opcode: 0xC6, addr_mode: AddressingMode::ZeroPage, func: dec},
     Mnemonic { name:"DEC", opcode: 0xCE, addr_mode: AddressingMode::Absolute, func: dec},
     Mnemonic { name:"DEC", opcode: 0xD6, addr_mode: AddressingMode::ZeroPageIndexedX, func: dec},
     Mnemonic { name:"DEC", opcode: 0xDE, addr_mode: AddressingMode::AbsoluteIndexedX, func: dec},
-    // MNEMONIC:INX
+    // MNEMONIC:DEX
     Mnemonic { name:"DEX", opcode: 0xCA, addr_mode: AddressingMode::Implied, func: dex},
-    // MNEMONIC:INY
+    // MNEMONIC:DEY
     Mnemonic { name:"DEY", opcode: 0x88, addr_mode: AddressingMode::Implied, func: dey},
+    // MNEMONIC:AND
+    Mnemonic { name:"AND", opcode: 0x21, addr_mode: AddressingMode::IndexedIndirect, func: and},
+    Mnemonic { name:"AND", opcode: 0x25, addr_mode: AddressingMode::ZeroPage, func: and},
+    Mnemonic { name:"AND", opcode: 0x29, addr_mode: AddressingMode::Immediate, func: and},
+    Mnemonic { name:"AND", opcode: 0x2D, addr_mode: AddressingMode::Absolute, func: and},
+    Mnemonic { name:"AND", opcode: 0x31, addr_mode: AddressingMode::IndirectIndexed, func: and},
+    Mnemonic { name:"AND", opcode: 0x35, addr_mode: AddressingMode::ZeroPageIndexedX, func: and},
+    Mnemonic { name:"AND", opcode: 0x39, addr_mode: AddressingMode::AbsoluteIndexedY, func: and},
+    Mnemonic { name:"AND", opcode: 0x3D, addr_mode: AddressingMode::AbsoluteIndexedX, func: and},
     ];
