@@ -141,7 +141,7 @@ pub fn inc(_reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &
     match mode {
         AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
             if let Option::Some(addr) = calculate_address(op, reg_x, reg_y, pc, mem, mode) {
-                mem[addr] += 1;
+                mem[addr] = mem[addr].wrapping_add(1);
                 
                 if mem[addr] == 0 {
                     *stat |= FLAG_ZERO;
@@ -151,5 +151,17 @@ pub fn inc(_reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &
             }
         },
         _ => {}
+    }
+}
+
+pub fn inx(_reg_a: &mut u8, reg_x: &mut u8, _reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, stat: &mut u8, _op: &Operand, _mem: &mut Memory, mode: AddressingMode) {
+    if mode == AddressingMode::Implied {
+        *reg_x = reg_x.wrapping_add(1);
+
+        if *reg_x == 0 {
+            *stat |= FLAG_ZERO;
+        }
+
+        *stat |= FLAG_NEGATIVE & *reg_x;
     }
 }

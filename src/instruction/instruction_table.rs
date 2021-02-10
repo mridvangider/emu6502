@@ -5,10 +5,11 @@ use super::util::{
 use super::arithmetic::{
     add,
     sub,
-    inc
+    inc,
+    inx,
 };
 
-const mnemomics: [Mnemonic;20] = [ 
+const mnemomics: [Mnemonic;21] = [ 
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
     Mnemonic { name:"ADC", opcode: 0x69, addr_mode: AddressingMode::Immediate, func: add},
@@ -31,4 +32,6 @@ const mnemomics: [Mnemonic;20] = [
     Mnemonic { name:"INC", opcode: 0xEE, addr_mode: AddressingMode::Absolute, func: inc},
     Mnemonic { name:"INC", opcode: 0xF6, addr_mode: AddressingMode::ZeroPageIndexedX, func: inc},
     Mnemonic { name:"INC", opcode: 0xFE, addr_mode: AddressingMode::AbsoluteIndexedX, func: inc},
+
+    Mnemonic { name:"INX", opcode: 0xE8, addr_mode: AddressingMode::Implied, func: inx},
     ];
