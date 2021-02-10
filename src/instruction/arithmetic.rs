@@ -6,7 +6,6 @@ use super::util::{
     FLAG_CARRY,
     FLAG_NEGATIVE,
     FLAG_ZERO,
-
 };
 
 pub fn add(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {

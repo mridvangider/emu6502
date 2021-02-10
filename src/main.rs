@@ -1,9 +1,9 @@
 pub mod instruction;
 
 fn le2be(val: &u16) -> u16 {
-    let mut ret: u16 = 0;
+    let mut ret: u16;
     ret = val & 0x00FF;
-    ret << 8;
+    ret = ret << 8;
     ret |= val >> 8;
     return ret;
 }
