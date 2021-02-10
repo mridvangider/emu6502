@@ -10,7 +10,7 @@ use super::arithmetic::{
     iny,
 };
 
-const mnemomics: [Mnemonic;22] = [
+const mnemonics: [Mnemonic;22] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
