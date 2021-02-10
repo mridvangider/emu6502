@@ -17,10 +17,13 @@ use super::bitwise::{
     ora,
     eor,
     asl,
+    lsr,
+    //rol,
+    //ror,
 };
 
 
-pub const MNEMONICS: [Mnemonic;57] = [
+pub const MNEMONICS: [Mnemonic;62] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -90,4 +93,10 @@ pub const MNEMONICS: [Mnemonic;57] = [
     Mnemonic { name:"ASL", opcode: 0x0E, addr_mode: AddressingMode::Absolute, func: asl},
     Mnemonic { name:"ASL", opcode: 0x16, addr_mode: AddressingMode::ZeroPageIndexedX, func: asl},
     Mnemonic { name:"ASL", opcode: 0x1E, addr_mode: AddressingMode::AbsoluteIndexedX, func: asl},
+    // MNEMONIC:LSR
+    Mnemonic { name:"LSR", opcode: 0x46, addr_mode: AddressingMode::ZeroPage, func: lsr},
+    Mnemonic { name:"LSR", opcode: 0x4A, addr_mode: AddressingMode::Accumulator, func: lsr},
+    Mnemonic { name:"LSR", opcode: 0x4E, addr_mode: AddressingMode::Absolute, func: lsr},
+    Mnemonic { name:"LSR", opcode: 0x56, addr_mode: AddressingMode::ZeroPageIndexedX, func: lsr},
+    Mnemonic { name:"LSR", opcode: 0x5E, addr_mode: AddressingMode::AbsoluteIndexedX, func: lsr},
     ];
