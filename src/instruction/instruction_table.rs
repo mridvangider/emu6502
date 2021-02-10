@@ -28,7 +28,7 @@ const mnemomics: [Mnemonic;20] = [
     Mnemonic { name:"SBC", opcode: 0xFD, addr_mode: AddressingMode::AbsoluteIndexedX, func: sub},
 
     Mnemonic { name:"INC", opcode: 0xE6, addr_mode: AddressingMode::ZeroPage, func: inc},
-    Mnemonic { name:"INC", opcode: 0xEE, addr_mode: AddressingMode::ZeroPage, func: inc},
-    Mnemonic { name:"INC", opcode: 0xF6, addr_mode: AddressingMode::ZeroPage, func: inc},
-    Mnemonic { name:"INC", opcode: 0xFE, addr_mode: AddressingMode::ZeroPage, func: inc},
+    Mnemonic { name:"INC", opcode: 0xEE, addr_mode: AddressingMode::Absolute, func: inc},
+    Mnemonic { name:"INC", opcode: 0xF6, addr_mode: AddressingMode::ZeroPageIndexedX, func: inc},
+    Mnemonic { name:"INC", opcode: 0xFE, addr_mode: AddressingMode::AbsoluteIndexedX, func: inc},
     ];
