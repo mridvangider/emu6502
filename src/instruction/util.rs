@@ -52,21 +52,22 @@ pub struct Mnemonic<'a> {
 }
 
 pub struct Instruction {
-    opcode:         u8,
-    operands:       std::vec::Vec<Operand>,
+    pub opcode:         u8,
+    pub operands:       std::vec::Vec<Operand>,
 }
 
-pub fn parse_inst(data:&Vec<u8>) -> Option<Instruction> {
-    return None;
-}
-
-
-
-pub fn le2be(val: &u16) -> u16 {
+pub fn change_endianness(val: &u16) -> u16 {
     let mut ret: u16;
     ret = val & 0x00FF;
     ret  = ret << 8;
     ret |= val >> 8;
+    return ret;
+}
+
+pub fn split_word(val: &u16) -> [u8;2] {
+    let mut ret = [0,0];
+    ret[0] = ( val & 0x00FF ) as u8;
+    ret[1] = ( ( val & 0xFF00 ) >> 8 ) as u8;
     return ret;
 }
 
@@ -75,14 +76,14 @@ pub fn calculate_address(op: &Operand, reg_x: &u8, reg_y: &u8, pc: &u16, mem: &M
     match mode {
         AddressingMode::Absolute => {
             if let Operand::Word(addr) = op {
-                return Some(le2be(addr) as usize);
+                return Some(change_endianness(addr) as usize);
             } else {
                 return None;
             }
         },
         AddressingMode::AbsoluteIndexedX => {
             if let Operand::Word(addr) = op {
-                ret = le2be(addr) as usize;
+                ret = change_endianness(addr) as usize;
                 ret += *reg_x as usize;
                 return Some(ret);
             } else {
@@ -91,7 +92,7 @@ pub fn calculate_address(op: &Operand, reg_x: &u8, reg_y: &u8, pc: &u16, mem: &M
         },
         AddressingMode::AbsoluteIndexedY => {
             if let Operand::Word(addr) = op {
-                ret = le2be(addr) as usize;
+                ret = change_endianness(addr) as usize;
                 ret += *reg_y as usize;
                 return Some(ret);
             } else {
@@ -100,7 +101,7 @@ pub fn calculate_address(op: &Operand, reg_x: &u8, reg_y: &u8, pc: &u16, mem: &M
         },
         AddressingMode::Indirect => {
             if let Operand::Word(addr) = op {
-                ret = le2be(addr) as usize;
+                ret = change_endianness(addr) as usize;
                 ret = mem[ret] as usize ;
                 return Some(ret);
             } else {

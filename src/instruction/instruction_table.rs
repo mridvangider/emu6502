@@ -13,7 +13,8 @@ use super::arithmetic::{
     dey,
 };
 
-const mnemonics: [Mnemonic;28] = [
+
+pub const MNEMONICS: [Mnemonic;28] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
