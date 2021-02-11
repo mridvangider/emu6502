@@ -97,3 +97,21 @@ pub fn cpy(_reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &
         _ => {}
     }
 }
+
+pub fn bit(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
+    match mode {
+        AddressingMode::Absolute | AddressingMode::ZeroPage => {
+            if let Option::Some(addr) = calculate_address(op, reg_x, reg_y, pc, mem, mode) {
+                if let Option::Some(val) = mem.get(addr) {
+                    *stat |= FLAG_NEGATIVE & ( ( *val & ( 1 << 6 ) ) << 1 );
+                    *stat |= FLAG_OVERFLOW & ( ( *val & ( 1 << 5 ) ) << 1 );
+
+                    if *reg_a & *val == 0 {
+                        *stat |= FLAG_ZERO;
+                    }
+                }                
+            }
+        },
+        _ => {}
+    }
+}

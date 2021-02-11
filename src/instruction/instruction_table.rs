@@ -25,10 +25,11 @@ use super::comparison::{
     cmp,
     cpx,
     cpy,
+    bit,
 };
 
 
-pub const MNEMONICS: [Mnemonic;86] = [
+pub const MNEMONICS: [Mnemonic;88] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -133,4 +134,7 @@ pub const MNEMONICS: [Mnemonic;86] = [
     Mnemonic { name:"CPY", opcode: 0xC0, addr_mode: AddressingMode::Immediate, func: cpy},
     Mnemonic { name:"CPY", opcode: 0xC4, addr_mode: AddressingMode::ZeroPage, func: cpy},
     Mnemonic { name:"CPY", opcode: 0xCC, addr_mode: AddressingMode::Absolute, func: cpy},
+    // MNEMONIC:BIT
+    Mnemonic { name:"BIT", opcode: 0x24, addr_mode: AddressingMode::ZeroPage, func: bit},
+    Mnemonic { name:"BIT", opcode: 0x2C, addr_mode: AddressingMode::Absolute, func: bit},
     ];
