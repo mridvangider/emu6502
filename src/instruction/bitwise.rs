@@ -33,7 +33,7 @@ pub fn and(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &m
 
                 *stat |= FLAG_NEGATIVE & *reg_a;
             }
-        }
+        },
         _ => {}
     }
 }
