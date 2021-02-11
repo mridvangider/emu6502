@@ -27,9 +27,17 @@ use super::comparison::{
     cpy,
     bit,
 };
+use super::laodstore::{
+    lda,
+    ldx,
+    ldy,
+    sta,
+    stx,
+    sty,
+};
 
 
-pub const MNEMONICS: [Mnemonic;88] = [
+pub const MNEMONICS: [Mnemonic;119] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add},
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -137,4 +145,41 @@ pub const MNEMONICS: [Mnemonic;88] = [
     // MNEMONIC:BIT
     Mnemonic { name:"BIT", opcode: 0x24, addr_mode: AddressingMode::ZeroPage, func: bit},
     Mnemonic { name:"BIT", opcode: 0x2C, addr_mode: AddressingMode::Absolute, func: bit},
+    // MNEMONIC:LDA
+    Mnemonic { name:"LDA", opcode: 0xA1, addr_mode: AddressingMode::IndexedIndirect, func: lda},
+    Mnemonic { name:"LDA", opcode: 0xA5, addr_mode: AddressingMode::ZeroPage, func: lda},
+    Mnemonic { name:"LDA", opcode: 0xA9, addr_mode: AddressingMode::Immediate, func: lda},
+    Mnemonic { name:"LDA", opcode: 0xAD, addr_mode: AddressingMode::Absolute, func: lda},
+    Mnemonic { name:"LDA", opcode: 0xB1, addr_mode: AddressingMode::IndirectIndexed, func: lda},
+    Mnemonic { name:"LDA", opcode: 0xB5, addr_mode: AddressingMode::ZeroPageIndexedX, func: lda},
+    Mnemonic { name:"LDA", opcode: 0xB9, addr_mode: AddressingMode::AbsoluteIndexedY, func: lda},
+    Mnemonic { name:"LDA", opcode: 0xBD, addr_mode: AddressingMode::AbsoluteIndexedX, func: lda},
+    // MNEMONIC:LDX
+    Mnemonic { name:"LDX", opcode: 0xA2, addr_mode: AddressingMode::Immediate, func: ldx},
+    Mnemonic { name:"LDX", opcode: 0xA6, addr_mode: AddressingMode::ZeroPage, func: ldx},
+    Mnemonic { name:"LDX", opcode: 0xAE, addr_mode: AddressingMode::Absolute, func: ldx},
+    Mnemonic { name:"LDX", opcode: 0xB6, addr_mode: AddressingMode::ZeroPageIndexedY, func: ldx},
+    Mnemonic { name:"LDX", opcode: 0xBE, addr_mode: AddressingMode::AbsoluteIndexedY, func: ldx},
+    // MNEMONIC:LDY
+    Mnemonic { name:"LDY", opcode: 0xA0, addr_mode: AddressingMode::Immediate, func: ldy},
+    Mnemonic { name:"LDY", opcode: 0xA4, addr_mode: AddressingMode::ZeroPage, func: ldy},
+    Mnemonic { name:"LDY", opcode: 0xAC, addr_mode: AddressingMode::Absolute, func: ldy},
+    Mnemonic { name:"LDY", opcode: 0xB4, addr_mode: AddressingMode::ZeroPageIndexedX, func: ldy},
+    Mnemonic { name:"LDY", opcode: 0xBC, addr_mode: AddressingMode::AbsoluteIndexedX, func: ldy},
+    // MNEMONIC:STA
+    Mnemonic { name:"STA", opcode: 0x81, addr_mode: AddressingMode::IndexedIndirect, func: sta},
+    Mnemonic { name:"STA", opcode: 0x85, addr_mode: AddressingMode::ZeroPage, func: sta},
+    Mnemonic { name:"STA", opcode: 0x8D, addr_mode: AddressingMode::Absolute, func: sta},
+    Mnemonic { name:"STA", opcode: 0x91, addr_mode: AddressingMode::IndirectIndexed, func: sta},
+    Mnemonic { name:"STA", opcode: 0x95, addr_mode: AddressingMode::ZeroPageIndexedX, func: sta},
+    Mnemonic { name:"STA", opcode: 0x99, addr_mode: AddressingMode::AbsoluteIndexedY, func: sta},
+    Mnemonic { name:"STA", opcode: 0x9D, addr_mode: AddressingMode::AbsoluteIndexedX, func: sta},
+    // MNEMONIC:STX
+    Mnemonic { name:"STX", opcode: 0x86, addr_mode: AddressingMode::ZeroPage, func: stx},
+    Mnemonic { name:"STX", opcode: 0x8E, addr_mode: AddressingMode::Absolute, func: stx},
+    Mnemonic { name:"STX", opcode: 0x96, addr_mode: AddressingMode::ZeroPageIndexedY, func: stx},
+    // MNEMONIC:STY
+    Mnemonic { name:"STY", opcode: 0x84, addr_mode: AddressingMode::ZeroPage, func: sty},
+    Mnemonic { name:"STY", opcode: 0x8C, addr_mode: AddressingMode::Absolute, func: sty},
+    Mnemonic { name:"STY", opcode: 0x94, addr_mode: AddressingMode::ZeroPageIndexedX, func: sty},
     ];
