@@ -2,42 +2,13 @@ use super::util::{
     Mnemonic,
     AddressingMode
 };
-use super::arithmetic::{
-    add,
-    sub,
-    inc,
-    inx,
-    iny,
-    dec,
-    dex,
-    dey,
-};
-use super::bitwise::{
-    and,
-    ora,
-    eor,
-    asl,
-    lsr,
-    rol,
-    ror,
-};
-use super::comparison::{
-    cmp,
-    cpx,
-    cpy,
-    bit,
-};
-use super::laodstore::{
-    lda,
-    ldx,
-    ldy,
-    sta,
-    stx,
-    sty,
-};
+use super::arithmetic::*;
+use super::bitwise::*;
+use super::comparison::*;
+use super::laodstore::*;
+use super::branch::*;
 
-
-pub const MNEMONICS: [Mnemonic;119] = [
+pub const MNEMONICS: [Mnemonic;127] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add },
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -182,4 +153,20 @@ pub const MNEMONICS: [Mnemonic;119] = [
     Mnemonic { name:"STY", opcode: 0x84, addr_mode: AddressingMode::ZeroPage, func: sty },
     Mnemonic { name:"STY", opcode: 0x8C, addr_mode: AddressingMode::Absolute, func: sty },
     Mnemonic { name:"STY", opcode: 0x94, addr_mode: AddressingMode::ZeroPageIndexedX, func: sty },
+    // MNEMONIC:BCC
+    Mnemonic { name:"BCC", opcode: 0x90, addr_mode: AddressingMode::Relative, func: bcc },
+    // MNEMONIC:BCS
+    Mnemonic { name:"BCS", opcode: 0xB0, addr_mode: AddressingMode::Relative, func: bcs },
+    // MNEMONIC:BNE
+    Mnemonic { name:"BNE", opcode: 0xD0, addr_mode: AddressingMode::Relative, func: bne },
+    // MNEMONIC:BEQ
+    Mnemonic { name:"BEQ", opcode: 0xF0, addr_mode: AddressingMode::Relative, func: beq },
+    // MNEMONIC:BPL
+    Mnemonic { name:"BPL", opcode: 0x10, addr_mode: AddressingMode::Relative, func: bpl },
+    // MNEMONIC:BMI
+    Mnemonic { name:"BMI", opcode: 0x30, addr_mode: AddressingMode::Relative, func: bmi },
+    // MNEMONIC:BVC
+    Mnemonic { name:"BVC", opcode: 0x90, addr_mode: AddressingMode::Relative, func: bvc },
+    // MNEMONIC:BVS
+    Mnemonic { name:"BVS", opcode: 0x90, addr_mode: AddressingMode::Relative, func: bvs },
     ];
