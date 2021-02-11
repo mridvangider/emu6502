@@ -7,8 +7,9 @@ use super::bitwise::*;
 use super::comparison::*;
 use super::laodstore::*;
 use super::branch::*;
+use super::transfer::*;
 
-pub const MNEMONICS: [Mnemonic;127] = [
+pub const MNEMONICS: [Mnemonic;133] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add },
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -169,4 +170,16 @@ pub const MNEMONICS: [Mnemonic;127] = [
     Mnemonic { name:"BVC", opcode: 0x90, addr_mode: AddressingMode::Relative, func: bvc },
     // MNEMONIC:BVS
     Mnemonic { name:"BVS", opcode: 0x90, addr_mode: AddressingMode::Relative, func: bvs },
+    // MNEMONIC:TAX
+    Mnemonic { name:"TAX", opcode: 0xAA, addr_mode: AddressingMode::Implied, func: tax },
+    // MNEMONIC:TXA
+    Mnemonic { name:"TXA", opcode: 0x8A, addr_mode: AddressingMode::Implied, func: txa },
+    // MNEMONIC:TAY
+    Mnemonic { name:"TAY", opcode: 0xA8, addr_mode: AddressingMode::Implied, func: tay },
+    // MNEMONIC:TYA
+    Mnemonic { name:"TYA", opcode: 0x98, addr_mode: AddressingMode::Implied, func: tya },
+    // MNEMONIC:TSX
+    Mnemonic { name:"TSX", opcode: 0xBA, addr_mode: AddressingMode::Implied, func: tsx },
+    // MNEMONIC:TXS
+    Mnemonic { name:"TXS", opcode: 0x9A, addr_mode: AddressingMode::Implied, func: txs },
     ];
