@@ -8,8 +8,9 @@ use super::comparison::*;
 use super::laodstore::*;
 use super::branch::*;
 use super::transfer::*;
+use super::stack::*;
 
-pub const MNEMONICS: [Mnemonic;133] = [
+pub const MNEMONICS: [Mnemonic;137] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add },
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -182,4 +183,12 @@ pub const MNEMONICS: [Mnemonic;133] = [
     Mnemonic { name:"TSX", opcode: 0xBA, addr_mode: AddressingMode::Implied, func: tsx },
     // MNEMONIC:TXS
     Mnemonic { name:"TXS", opcode: 0x9A, addr_mode: AddressingMode::Implied, func: txs },
+    // MNEMONIC:PHA
+    Mnemonic { name:"PHA", opcode: 0x48, addr_mode: AddressingMode::Implied, func: pha },
+    // MNEMONIC:PLA
+    Mnemonic { name:"PLA", opcode: 0x68, addr_mode: AddressingMode::Implied, func: pla },
+    // MNEMONIC:PHP
+    Mnemonic { name:"PHP", opcode: 0x08, addr_mode: AddressingMode::Implied, func: php },
+    // MNEMONIC:PLP
+    Mnemonic { name:"PLP", opcode: 0x28, addr_mode: AddressingMode::Implied, func: plp },
     ];
