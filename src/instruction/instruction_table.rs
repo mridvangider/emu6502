@@ -9,8 +9,9 @@ use super::laodstore::*;
 use super::branch::*;
 use super::transfer::*;
 use super::stack::*;
+use super::setclear::*;
 
-pub const MNEMONICS: [Mnemonic;137] = [
+pub const MNEMONICS: [Mnemonic;144] = [
     // MNEMONIC:ADC
     Mnemonic { name:"ADC", opcode: 0x61, addr_mode: AddressingMode::IndexedIndirect, func: add },
     Mnemonic { name:"ADC", opcode: 0x65, addr_mode: AddressingMode::ZeroPage, func: add },
@@ -191,4 +192,18 @@ pub const MNEMONICS: [Mnemonic;137] = [
     Mnemonic { name:"PHP", opcode: 0x08, addr_mode: AddressingMode::Implied, func: php },
     // MNEMONIC:PLP
     Mnemonic { name:"PLP", opcode: 0x28, addr_mode: AddressingMode::Implied, func: plp },
+    // MNEMONIC:CLC
+    Mnemonic { name:"CLC", opcode: 0x18, addr_mode: AddressingMode::Implied, func: clc },
+    // MNEMONIC:SEC
+    Mnemonic { name:"SEC", opcode: 0x38, addr_mode: AddressingMode::Implied, func: sec },
+    // MNEMONIC:CLD
+    Mnemonic { name:"CLD", opcode: 0xD8, addr_mode: AddressingMode::Implied, func: cld },
+    // MNEMONIC:SED
+    Mnemonic { name:"SED", opcode: 0xF8, addr_mode: AddressingMode::Implied, func: sed },
+    // MNEMONIC:CLI
+    Mnemonic { name:"CLI", opcode: 0x58, addr_mode: AddressingMode::Implied, func: cli },
+    // MNEMONIC:SEI
+    Mnemonic { name:"SEI", opcode: 0x78, addr_mode: AddressingMode::Implied, func: sei },
+    // MNEMONIC:CLV
+    Mnemonic { name:"CLV", opcode: 0xB8, addr_mode: AddressingMode::Implied, func: clv },
     ];

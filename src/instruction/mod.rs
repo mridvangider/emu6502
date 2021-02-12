@@ -8,5 +8,5 @@ pub mod laodstore;              // Done
 pub mod branch;                 // Done
 pub mod stack;                  // Done
 pub mod transfer;               // Done
-pub mod jump;
-pub mod setclear;
+pub mod jump;                   // Done
+pub mod setclear;               // Done
