@@ -28,7 +28,7 @@ pub enum Operand {
     Word(u16)
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Copy, Clone)]
 pub enum AddressingMode {
     Accumulator,
     Immediate,
@@ -53,8 +53,8 @@ pub struct Mnemonic<'a> {
 }
 
 pub struct Instruction {
-    pub opcode:         u8,
-    pub operands:       std::vec::Vec<Operand>,
+    pub opcode:        u8,
+    pub operand:       Operand,
 }
 
 pub fn change_endianness(val: &u16) -> u16 {
