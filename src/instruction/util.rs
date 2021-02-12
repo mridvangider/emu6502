@@ -9,9 +9,10 @@ pub enum OperandType {
     Immediate
 }
 
-pub const REG_A: u8 = 0x01;
-pub const REG_X: u8 = 0x02;
-pub const REG_Y: u8 = 0x04;
+pub type Err = u8;
+
+pub const ERR_STACK_FULL: Err = 1;
+pub const ERR_STACK_EMPTY: Err = 2;
 
 pub const FLAG_CARRY: u8 = 0x01;    // 00 00 00 01
 pub const FLAG_ZERO: u8 = 0x02;     // 00 00 00 10
@@ -68,6 +69,14 @@ pub fn split_word(val: &u16) -> [u8;2] {
     let mut ret = [0,0];
     ret[0] = ( val & 0x00FF ) as u8;
     ret[1] = ( ( val & 0xFF00 ) >> 8 ) as u8;
+    return ret;
+}
+
+pub fn make_word(low: &u8, high: &u8) -> u16 {
+    let mut ret: u16 = 0;
+    ret |= *high as u16;
+    ret = ret << 8;
+    ret |= *low as u16;
     return ret;
 }
 
@@ -151,4 +160,67 @@ pub fn calculate_address(op: &Operand, reg_x: &u8, reg_y: &u8, pc: &u16, mem: &M
         }
         _ => return None
     }
+}
+
+pub fn push_stack_byte(val: u8, sp: &mut u8, mem: &mut Memory) -> Result<(),Err> {
+    if *sp > 0 {
+        *sp -= 1;
+        let addr: usize = 0x0100 + *sp as usize;
+        mem[addr] = val;
+        return Ok(());
+    } else {
+        return Err(ERR_STACK_FULL);
+    }
+}
+
+pub fn push_stack_word(word: u16, sp:&mut u8, mem:&mut Memory, little_endian: bool) -> Result<(),Err> {
+    let mut val = word;
+    
+    if little_endian {
+        val = change_endianness(&val);
+    }
+
+    let split: [u8;2] = split_word(&val);
+    
+    if let Result::Err(e) = push_stack_byte(split[0], sp, mem) {
+        return Err(e);
+    }
+    if let Result::Err(e) = push_stack_byte(split[1], sp, mem) {
+        return Err(e);
+    }
+
+    return Ok(());
+}
+
+pub fn pop_stack_byte(sp: &mut u8, mem: &mut Memory) -> Result<u8,Err> {
+    if *sp < 0xFF {
+        let addr = 0x0100 + *sp as usize;
+        let ret = mem[addr];
+        *sp += 1;
+        return Ok(ret);
+    } else {
+        return Err(ERR_STACK_EMPTY);
+    }
+}
+
+pub fn pop_stack_word(sp: &mut u8, mem: &mut Memory, little_endian: bool) -> Result<u16,Err> {
+    let mut ret: u16;
+    let (low, high) : (u8,u8);
+    match pop_stack_byte(sp, mem) {
+        Ok(val) => low = val,
+        Err(e) => return Err(e),
+    }
+    
+    match pop_stack_byte(sp, mem) {
+        Ok(val) => high = val,
+        Err(e) => return Err(e),
+    }
+
+    ret = make_word(&low, &high);
+
+    if !little_endian {
+        ret = change_endianness(&ret);
+    }
+    
+    return Ok(ret);
 }
