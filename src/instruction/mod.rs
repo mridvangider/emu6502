@@ -6,7 +6,7 @@ pub mod bitwise;                // Done
 pub mod comparison;             // Done
 pub mod laodstore;              // Done
 pub mod branch;                 // Done
-pub mod stack;
+pub mod stack;                  // Done
 pub mod transfer;               // Done
 pub mod jump;
 pub mod setclear;

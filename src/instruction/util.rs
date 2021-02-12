@@ -218,7 +218,7 @@ pub fn pop_stack_word(sp: &mut u8, mem: &mut Memory, little_endian: bool) -> Res
 
     ret = make_word(&low, &high);
 
-    if !little_endian {
+    if little_endian {
         ret = change_endianness(&ret);
     }
     
