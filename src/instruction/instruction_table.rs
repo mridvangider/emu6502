@@ -1,6 +1,7 @@
 use super::util::{
     Mnemonic,
-    AddressingMode
+    AddressingMode,
+    do_nothing,
 };
 use super::arithmetic::*;
 use super::bitwise::*;
@@ -10,6 +11,8 @@ use super::branch::*;
 use super::transfer::*;
 use super::stack::*;
 use super::setclear::*;
+
+pub const EMPTY_MNEM : Mnemonic = Mnemonic { name:"NONE", opcode: 0x00, addr_mode: AddressingMode::Implied, func: do_nothing };
 
 pub const MNEMONICS: [Mnemonic;144] = [
     // MNEMONIC:ADC

@@ -1,18 +1,7 @@
+use super::errors::*;
+
 pub type Memory = Vec<u8>;
 pub type OperationFunction = fn (&mut u8, &mut u8, &mut u8, &mut u16, &mut u8, &mut u8, &Operand, &mut Memory, mode: AddressingMode);
-
-#[derive(PartialEq)]
-pub enum OperandType {
-    Register,
-    Memory,
-    ZeroPage,
-    Immediate
-}
-
-pub type Err = u8;
-
-pub const ERR_STACK_FULL: Err = 1;
-pub const ERR_STACK_EMPTY: Err = 2;
 
 pub const FLAG_CARRY: u8 = 0x01;    // 00 00 00 01
 pub const FLAG_ZERO: u8 = 0x02;     // 00 00 00 10
@@ -45,17 +34,19 @@ pub enum AddressingMode {
     IndirectIndexed,
 }
 
-pub struct Mnemonic<'a> {
-    pub name:       &'a str,
+pub struct Mnemonic {
+    pub name:       &'static str,
     pub opcode:     u8,
     pub addr_mode:  AddressingMode,
     pub func:       OperationFunction
 }
 
-pub struct Instruction {
-    pub opcode:        u8,
+pub struct Instruction<'a> {
+    pub mnemonic:      &'a Mnemonic,
     pub operand:       Operand,
 }
+
+pub fn do_nothing(_reg_a: &mut u8, _reg_x: &mut u8, _reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, _stat: &mut u8, _op: &Operand, _mem: &mut Memory, _mode: AddressingMode) { return; }
 
 pub fn change_endianness(val: &u16) -> u16 {
     let mut ret: u16;
@@ -223,4 +214,12 @@ pub fn pop_stack_word(sp: &mut u8, mem: &mut Memory, little_endian: bool) -> Res
     }
     
     return Ok(ret);
+}
+
+pub fn safe_remove<T>(vec :&mut Vec<T>, index :usize) -> Option<T> {
+    if index < vec.len() {
+        return Some(vec.remove(index));
+    } else {
+        return None;
+    }
 }
