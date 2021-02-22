@@ -3,10 +3,19 @@ use crate::util::{
     Memory,
     Operand,
     push_stack_word,
-}
+};
+use crate::cpu::*;
 
+impl CPU {
+    pub fn brk (&mut self, op : &Operand, mode: AddressingMode) -> {
+        if let Result::Err(_) = self.push_stack_word(self.pc, true) {
+            return;
+        }
 
+        if let Result::Err(_) = self.push_stack_byte(self.stat | FLAG_BREAK) {
+            return;
+        }
 
-pub fn brk (reg_a: &mut u8, reg_x: &mut u8, _reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, stat: &mut u8, _op: &Operand, _mem: &mut Memory, mode: AddressingMode) -> {
-
+        self.load_vector(0xFFFE, 0xFFFF);
+    }
 }

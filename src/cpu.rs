@@ -20,6 +20,40 @@ pub struct CPU {
 }
 
 impl CPU {
+    fn load_vector(&mut self, low : u16, high : u16) {
+        let l = self.mem[low as usize];
+        let h = self.mem[high as usize];
+        self.pc = make_word(&l, &h);
+    }
+
+    pub fn reset(&mut self) {
+        self.load_vector(0xFFFC, 0xFFFD);
+    }
+
+    pub fn nmi(&mut self) {
+        if let Result::Err(_) = self.push_stack_word(self.pc, true) {
+            return;
+        }
+
+        if let Result::Err(_) = self.push_stack_byte(self.stat) {
+            return;
+        }
+
+        self.load_vector(0xFFFA, 0xFFFB);
+    }
+
+    pub fn irq(&mut self) {
+        if let Result::Err(_) = self.push_stack_word(self.pc, true) {
+            return;
+        }
+
+        if let Result::Err(_) = self.push_stack_byte(self.stat) {
+            return;
+        }
+
+        self.load_vector(0xFFFE, 0xFFFF);
+    }
+
     pub fn calculate_address(&self, op: &Operand, mode: AddressingMode) -> Option<usize> {
         let mut ret: usize;
         match mode {
