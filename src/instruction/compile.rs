@@ -1,6 +1,5 @@
-use super::util::{
+use super::super::util::{
     AddressingMode,
-    Instruction,
     Mnemonic,
     Operand,
     change_endianness,
@@ -9,7 +8,7 @@ use super::util::{
     safe_remove,
 };
 use super::instruction_table::MNEMONICS;
-use super::errors::*;
+use super::super::errors::*;
 
 fn decode_mnemonic<'a>(ocode: &u8) -> Option<&'a Mnemonic> {
     for mnem in MNEMONICS.iter() {
@@ -37,19 +36,6 @@ fn encode_operand(op: &Operand) -> Vec<u8> {
     return ret;
 }
 
-pub fn assemble(ins: &Instruction) -> Vec<u8> {
-    let mut ret: Vec<u8>  = Vec::new();
-    
-    ret.push(ins.mnemonic.opcode);
-    ret.append(
-        &mut encode_operand(
-            &ins.operand
-        )
-    );
-    
-    return ret;
-}
-
 fn addr_mode_to_oprnd_size(mode: AddressingMode) -> usize {
     match mode {
         AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | 
@@ -60,15 +46,15 @@ fn addr_mode_to_oprnd_size(mode: AddressingMode) -> usize {
     }
 }
 
-fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Option<Operand> {
+fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Result<Operand, Err> {
     match addr_mode_to_oprnd_size(mode) {
         0 => {
-            return Some(
+            return Ok(
                 Operand::Null
             );
         },
         1 => {
-            return Some(
+            return Ok(
                 Operand::Byte(
                     safe_remove(bytes, 1)?
                 )
@@ -79,30 +65,17 @@ fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Option<Operand> {
             low = safe_remove(bytes, 1)?;
             high = safe_remove(bytes, 1)?;
 
-            return Some(
+            return Ok(
                 Operand::Word(
                     make_word(&low, &high)
                 )
             )
         }
-        _ => { return None; }
+        _ => { return Err(ERR_NO_VALID_OPERAND); }
     }
 }
 
-pub fn disassemble(bytes: &mut Vec<u8>) -> Option<Instruction> {
-    let opcode = safe_remove(bytes, 1)?;
-    let mnem = decode_mnemonic(&opcode)?;
-    let operand = get_operand(bytes, mnem.addr_mode)?;
-
-    Some(
-        Instruction {
-            mnemonic: decode_mnemonic(&opcode)?,
-            operand: operand
-        }
-    )
-}
-
-pub fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
+fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
     for m in MNEMONICS.iter() {
         if name == m.name {
             return Ok(m);
@@ -112,7 +85,7 @@ pub fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
     return Err(ERR_MNEMONIC_NOT_FOUND);
 }
 
-pub fn process_operand(op : &str, mode : AddressingMode) -> Result<Operand, Err> {
+fn process_operand(op : &str, mode : AddressingMode) -> Result<Operand, Err> {
     
     match mode {
         AddressingMode::Absolute => {
@@ -146,7 +119,7 @@ pub fn process_operand(op : &str, mode : AddressingMode) -> Result<Operand, Err>
         _ => Ok(Operand::Null)
     }
 }
-
+/*
 pub fn compile_line(code: &str) -> Result<Instruction,Err> {
     match code.lines().next() {
         Some(line) => {
@@ -185,7 +158,7 @@ pub fn compile_line(code: &str) -> Result<Instruction,Err> {
         None => Err(ERR_INVALID_LINE)
     }
 }
-/*
+
 pub fn decompile(ins: &Vec<Instruction>) -> String {
     let ret = String::new();
     return ret;

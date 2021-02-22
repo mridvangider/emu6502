@@ -1,4 +1,7 @@
 pub mod instruction;
+pub mod cpu;
+pub mod util;
+pub mod errors;
 
 fn main() {
     let a:u16 = 0xffff;

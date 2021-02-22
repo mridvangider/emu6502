@@ -8,3 +8,5 @@ pub const ERR_OPERAND_WRONG_FORMAT : Err = 5;
 pub const ERR_WRONG_OPERAND_COUNT : Err = 6;
 pub const ERR_INVALID_LINE : Err = 7;
 pub const ERR_MNEMONIC_NOT_FOUND : Err = 8;
+pub const ERR_NO_VALID_OPERAND : Err = 9;
+pub const ERR_INVALID_INDEX : Err = 10;

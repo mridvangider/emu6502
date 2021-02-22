@@ -1,219 +1,219 @@
-use super::util::{
+use super::super::util::{
     AddressingMode,
     Operand,
-    Memory,
-    calculate_address,
     FLAG_CARRY,
     FLAG_NEGATIVE,
     FLAG_ZERO,
 };
-
-pub fn add(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
-    match mode {
-        AddressingMode::Immediate => {
-            if let Operand::Byte(val) = op {
-                let old_carry = *stat & FLAG_CARRY;
-                if u8::MAX - *reg_a >= *val {
-                    *reg_a += *val;
-                    *stat &= !FLAG_CARRY;
-                } else {
-                    *reg_a = (*reg_a).wrapping_add(*val);
-                    *stat |= FLAG_CARRY;
-                }
-
-                if old_carry == FLAG_CARRY {
-                    if u8::MAX != *reg_a {
-                        *reg_a += 1;
-                        *stat &= !FLAG_CARRY;
+use super::super::cpu::*;
+impl CPU {
+    pub fn add(&mut self, op : &Operand, mode : AddressingMode) {
+        match mode {
+            AddressingMode::Immediate => {
+                if let Operand::Byte(val) = op {
+                    let old_carry = self.stat & FLAG_CARRY;
+                    if u8::MAX - self.reg_a >= *val {
+                        self.reg_a += *val;
+                        self.stat &= !FLAG_CARRY;
                     } else {
-                        *reg_a = (*reg_a).wrapping_add(1);
-                        *stat |= FLAG_CARRY;
+                        self.reg_a = (self.reg_a).wrapping_add(*val);
+                        self.stat |= FLAG_CARRY;
                     }
-                }
 
-                if *reg_a == 0 {
-                    *stat |= FLAG_ZERO;
-                }
+                    if old_carry == FLAG_CARRY {
+                        if u8::MAX != self.reg_a {
+                            self.reg_a += 1;
+                            self.stat &= !FLAG_CARRY;
+                        } else {
+                            self.reg_a = (self.reg_a).wrapping_add(1);
+                            self.stat |= FLAG_CARRY;
+                        }
+                    }
 
-                *stat |= FLAG_NEGATIVE & *reg_a;
-            }
-        },
-        AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | AddressingMode::AbsoluteIndexedY | AddressingMode::ZeroPage | 
-        AddressingMode::ZeroPageIndexedX |AddressingMode::IndexedIndirect | AddressingMode::IndirectIndexed => {
-            if let Option::Some(addr) = calculate_address(op, reg_x, reg_y, pc, mem, mode) {
-                let val: u8 = mem[addr];
-                let old_carry = *stat & FLAG_CARRY;
-                if u8::MAX - *reg_a >= val {
-                    *reg_a += val;
-                    *stat &= !FLAG_CARRY;
-                } else {
-                    *reg_a = (*reg_a).wrapping_add(val);
-                    *stat |= FLAG_CARRY;
-                }
+                    if self.reg_a == 0 {
+                        self.stat |= FLAG_ZERO;
+                    }
 
-                if old_carry == FLAG_CARRY {
-                    if u8::MAX != *reg_a {
-                        *reg_a += 1;
-                        *stat &= !FLAG_CARRY;
+                    self.stat |= FLAG_NEGATIVE & self.reg_a;
+                }
+            },
+            AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | AddressingMode::AbsoluteIndexedY | AddressingMode::ZeroPage | 
+            AddressingMode::ZeroPageIndexedX |AddressingMode::IndexedIndirect | AddressingMode::IndirectIndexed => {
+                if let Option::Some(addr) = self.calculate_address(op, mode) {
+                    let val: u8 = self.mem[addr];
+                    let old_carry = self.stat & FLAG_CARRY;
+                    if u8::MAX - self.reg_a >= val {
+                        self.reg_a += val;
+                        self.stat &= !FLAG_CARRY;
                     } else {
-                        *reg_a = (*reg_a).wrapping_add(1);
-                        *stat |= FLAG_CARRY;
+                        self.reg_a = (self.reg_a).wrapping_add(val);
+                        self.stat |= FLAG_CARRY;
                     }
-                }
 
-                if *reg_a == 0 {
-                    *stat |= FLAG_ZERO;
-                }
+                    if old_carry == FLAG_CARRY {
+                        if u8::MAX != self.reg_a {
+                            self.reg_a += 1;
+                            self.stat &= !FLAG_CARRY;
+                        } else {
+                            self.reg_a = (self.reg_a).wrapping_add(1);
+                            self.stat |= FLAG_CARRY;
+                        }
+                    }
 
-                *stat |= FLAG_NEGATIVE & *reg_a;
-            }
-        },
-        _ => {}
+                    if self.reg_a == 0 {
+                        self.stat |= FLAG_ZERO;
+                    }
+
+                    self.stat |= FLAG_NEGATIVE & self.reg_a;
+                }
+            },
+            _ => {}
+        }
     }
-}
 
-pub fn sub(reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
-    match mode {
-        AddressingMode::Immediate => {
-            if let Operand::Byte(val) = op {
-                let old_carry = *stat & FLAG_CARRY;
-                if *reg_a >= *val {
-                    *reg_a -= *val;
-                    *stat &= !FLAG_CARRY;
-                } else {
-                    *reg_a = (*reg_a).wrapping_sub(*val);
-                    *stat |= FLAG_CARRY;
-                }
-
-                if old_carry == FLAG_CARRY {
-                    if u8::MIN != *reg_a {
-                        *reg_a -= 1;
-                        *stat &= !FLAG_CARRY;
+    pub fn sub(&mut self, op : &Operand, mode : AddressingMode) {
+        match mode {
+            AddressingMode::Immediate => {
+                if let Operand::Byte(val) = op {
+                    let old_carry = self.stat & FLAG_CARRY;
+                    if self.reg_a >= *val {
+                        self.reg_a -= *val;
+                        self.stat &= !FLAG_CARRY;
                     } else {
-                        *reg_a = (*reg_a).wrapping_sub(1);
-                        *stat |= FLAG_CARRY;
+                        self.reg_a = (self.reg_a).wrapping_sub(*val);
+                        self.stat |= FLAG_CARRY;
                     }
-                }
 
-                if *reg_a == 0 {
-                    *stat |= FLAG_ZERO;
-                }
+                    if old_carry == FLAG_CARRY {
+                        if u8::MIN != self.reg_a {
+                            self.reg_a -= 1;
+                            self.stat &= !FLAG_CARRY;
+                        } else {
+                            self.reg_a = (self.reg_a).wrapping_sub(1);
+                            self.stat |= FLAG_CARRY;
+                        }
+                    }
 
-                *stat |= FLAG_NEGATIVE & *reg_a;
-            }
-        },
-        AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | AddressingMode::AbsoluteIndexedY | AddressingMode::ZeroPage | 
-        AddressingMode::ZeroPageIndexedX |AddressingMode::IndexedIndirect | AddressingMode::IndirectIndexed => {
-            if let Option::Some(addr) = calculate_address(op, reg_x, reg_y, pc, mem, mode) {
-                let val: u8 = mem[addr];
-                let old_carry = *stat & FLAG_CARRY;
-                if *reg_a >= val {
-                    *reg_a -= val;
-                    *stat &= !FLAG_CARRY; 
-                } else {
-                    *reg_a = (*reg_a).wrapping_sub(val);
-                    *stat |= FLAG_CARRY;
-                }
+                    if self.reg_a == 0 {
+                        self.stat |= FLAG_ZERO;
+                    }
 
-                if old_carry == FLAG_CARRY {
-                    if u8::MIN != *reg_a {
-                        *reg_a -= 1;
-                        *stat &= !FLAG_CARRY;
+                    self.stat |= FLAG_NEGATIVE & self.reg_a;
+                }
+            },
+            AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | AddressingMode::AbsoluteIndexedY | AddressingMode::ZeroPage | 
+            AddressingMode::ZeroPageIndexedX |AddressingMode::IndexedIndirect | AddressingMode::IndirectIndexed => {
+                if let Option::Some(addr) = self.calculate_address(op, mode) {
+                    let val: u8 = self.mem[addr];
+                    let old_carry = self.stat & FLAG_CARRY;
+                    if self.reg_a >= val {
+                        self.reg_a -= val;
+                        self.stat &= !FLAG_CARRY; 
                     } else {
-                        *reg_a = (*reg_a).wrapping_sub(1);
-                        *stat |= FLAG_CARRY;
+                        self.reg_a = (self.reg_a).wrapping_sub(val);
+                        self.stat |= FLAG_CARRY;
                     }
-                }
 
-                if *reg_a == 0 {
-                    *stat |= FLAG_ZERO;
-                }
+                    if old_carry == FLAG_CARRY {
+                        if u8::MIN != self.reg_a {
+                            self.reg_a -= 1;
+                            self.stat &= !FLAG_CARRY;
+                        } else {
+                            self.reg_a = (self.reg_a).wrapping_sub(1);
+                            self.stat |= FLAG_CARRY;
+                        }
+                    }
 
-                *stat |= FLAG_NEGATIVE & *reg_a;
+                    if self.reg_a == 0 {
+                        self.stat |= FLAG_ZERO;
+                    }
+
+                    self.stat |= FLAG_NEGATIVE & self.reg_a;
+                }
+            },
+            _ => {}
+        }
+    }
+
+    pub fn inc(&mut self, op : &Operand, mode : AddressingMode) {
+        match mode {
+            AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
+                if let Option::Some(addr) = self.calculate_address(op, mode) {
+                    self.mem[addr] = self.mem[addr].wrapping_add(1);
+                    
+                    if self.mem[addr] == 0 {
+                        self.stat |= FLAG_ZERO;
+                    }
+
+                    self.stat |= FLAG_NEGATIVE & self.mem[addr];
+                }
+            },
+            _ => {}
+        }
+    }
+
+    pub fn inx(&mut self, _op : &Operand, mode : AddressingMode) {
+        if mode == AddressingMode::Implied {
+            self.reg_x = self.reg_x.wrapping_add(1);
+
+            if self.reg_x == 0 {
+                self.stat |= FLAG_ZERO;
             }
-        },
-        _ => {}
+
+            self.stat |= FLAG_NEGATIVE & self.reg_x;
+        }
     }
-}
 
-pub fn inc(_reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
-    match mode {
-        AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
-            if let Option::Some(addr) = calculate_address(op, reg_x, reg_y, pc, mem, mode) {
-                mem[addr] = mem[addr].wrapping_add(1);
-                
-                if mem[addr] == 0 {
-                    *stat |= FLAG_ZERO;
-                }
+    pub fn iny(&mut self, _op : &Operand, mode : AddressingMode) {
+        if mode == AddressingMode::Implied {
+            self.reg_y = self.reg_y.wrapping_add(1);
 
-                *stat |= FLAG_NEGATIVE & mem[addr];
+            if self.reg_y == 0 {
+                self.stat |= FLAG_ZERO;
             }
-        },
-        _ => {}
-    }
-}
 
-pub fn inx(_reg_a: &mut u8, reg_x: &mut u8, _reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, stat: &mut u8, _op: &Operand, _mem: &mut Memory, mode: AddressingMode) {
-    if mode == AddressingMode::Implied {
-        *reg_x = reg_x.wrapping_add(1);
-
-        if *reg_x == 0 {
-            *stat |= FLAG_ZERO;
+            self.stat |= FLAG_NEGATIVE & self.reg_y;
         }
-
-        *stat |= FLAG_NEGATIVE & *reg_x;
     }
-}
 
-pub fn iny(_reg_a: &mut u8, _reg_x: &mut u8, reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, stat: &mut u8, _op: &Operand, _mem: &mut Memory, mode: AddressingMode) {
-    if mode == AddressingMode::Implied {
-        *reg_y = reg_y.wrapping_add(1);
+    pub fn dec(&mut self, op : &Operand, mode : AddressingMode) {
+        match mode {
+            AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
+                if let Option::Some(addr) = self.calculate_address(op, mode) {
+                    self.mem[addr] = self.mem[addr].wrapping_sub(1);
+                    
+                    if self.mem[addr] == 0 {
+                        self.stat |= FLAG_ZERO;
+                    }
 
-        if *reg_y == 0 {
-            *stat |= FLAG_ZERO;
-        }
-
-        *stat |= FLAG_NEGATIVE & *reg_y;
-    }
-}
-
-pub fn dec(_reg_a: &mut u8, reg_x: &mut u8, reg_y: &mut u8, pc: &mut u16, _sp: &mut u8, stat: &mut u8, op: &Operand, mem: &mut Memory, mode: AddressingMode) {
-    match mode {
-        AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
-            if let Option::Some(addr) = calculate_address(op, reg_x, reg_y, pc, mem, mode) {
-                mem[addr] = mem[addr].wrapping_sub(1);
-                
-                if mem[addr] == 0 {
-                    *stat |= FLAG_ZERO;
+                    self.stat |= FLAG_NEGATIVE & self.mem[addr];
                 }
+            },
+            _ => {}
+        }
+    }
 
-                *stat |= FLAG_NEGATIVE & mem[addr];
+    pub fn dex(&mut self, _op : &Operand, mode : AddressingMode) {
+        if mode == AddressingMode::Implied {
+            self.reg_x = self.reg_x.wrapping_sub(1);
+
+            if self.reg_x == 0 {
+                self.stat |= FLAG_ZERO;
             }
-        },
-        _ => {}
-    }
-}
 
-pub fn dex(_reg_a: &mut u8, reg_x: &mut u8, _reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, stat: &mut u8, _op: &Operand, _mem: &mut Memory, mode: AddressingMode) {
-    if mode == AddressingMode::Implied {
-        *reg_x = reg_x.wrapping_sub(1);
-
-        if *reg_x == 0 {
-            *stat |= FLAG_ZERO;
+            self.stat |= FLAG_NEGATIVE & self.reg_x;
         }
-
-        *stat |= FLAG_NEGATIVE & *reg_x;
     }
-}
 
-pub fn dey(_reg_a: &mut u8, _reg_x: &mut u8, reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, stat: &mut u8, _op: &Operand, _mem: &mut Memory, mode: AddressingMode) {
-    if mode == AddressingMode::Implied {
-        *reg_y = reg_y.wrapping_sub(1);
+    pub fn dey(&mut self, _op : &Operand, mode : AddressingMode) {
+        if mode == AddressingMode::Implied {
+            self.reg_y = self.reg_y.wrapping_sub(1);
 
-        if *reg_y == 0 {
-            *stat |= FLAG_ZERO;
+            if self.reg_y == 0 {
+                self.stat |= FLAG_ZERO;
+            }
+
+            self.stat |= FLAG_NEGATIVE & self.reg_y;
         }
-
-        *stat |= FLAG_NEGATIVE & *reg_y;
     }
 }
