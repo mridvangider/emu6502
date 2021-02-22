@@ -8,6 +8,7 @@ use crate::util::{
 use super::errors::*;
 
 pub struct CPU {
+    
     pub reg_a   : u8,
     pub reg_x   : u8,
     pub reg_y   : u8,
@@ -17,10 +18,12 @@ pub struct CPU {
     pub sp      : u8,
 
     pub mem     : Vec<u8>,
+
+    pub int     : bool,
 }
 
 impl CPU {
-    fn load_vector(&mut self, low : u16, high : u16) {
+    pub fn load_vector(&mut self, low : u16, high : u16) {
         let l = self.mem[low as usize];
         let h = self.mem[high as usize];
         self.pc = make_word(&l, &h);
@@ -39,6 +42,7 @@ impl CPU {
             return;
         }
 
+        self.int = false;
         self.load_vector(0xFFFA, 0xFFFB);
     }
 
@@ -51,6 +55,7 @@ impl CPU {
             return;
         }
 
+        self.int = false;
         self.load_vector(0xFFFE, 0xFFFF);
     }
 

@@ -9,3 +9,4 @@ pub mod stack;                  // Done
 pub mod transfer;               // Done
 pub mod jump;                   // Done
 pub mod setclear;               // Done
+pub mod miscellenaus;

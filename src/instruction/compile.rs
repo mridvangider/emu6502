@@ -8,7 +8,7 @@ use super::super::util::{
     safe_remove,
 };
 use super::instruction_table::MNEMONICS;
-use super::super::errors::*;
+use crate::errors::*;
 
 fn decode_mnemonic<'a>(ocode: &u8) -> Option<&'a Mnemonic> {
     for mnem in MNEMONICS.iter() {

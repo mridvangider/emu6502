@@ -35,18 +35,19 @@ pub enum AddressingMode {
     IndirectIndexed,
 }
 
+pub type opfunc = fn(&mut CPU, &Operand, AddressingMode);
+
 pub struct Mnemonic {
     pub name:       &'static str,
     pub opcode:     u8,
     pub addr_mode:  AddressingMode,
+    pub ofunc:      opfunc,
 }
 
 pub struct Instruction<'a> {
     pub mnemonic:      &'a Mnemonic,
     pub operand:       Operand,
 }
-
-pub fn do_nothing(_reg_a: &mut u8, _reg_x: &mut u8, _reg_y: &mut u8, _pc: &mut u16, _sp: &mut u8, _stat: &mut u8, _op: &Operand, _mem: &mut Memory, _mode: AddressingMode) { return; }
 
 pub fn change_endianness(val: &u16) -> u16 {
     let mut ret: u16;
@@ -71,8 +72,6 @@ pub fn make_word(low: &u8, high: &u8) -> u16 {
     return ret;
 }
 
-
-
 pub fn safe_remove<T>(vec :&mut Vec<T>, index :usize) -> Result<T, Err> {
     if index < vec.len() {
         return Ok(vec.remove(index));
@@ -80,5 +79,3 @@ pub fn safe_remove<T>(vec :&mut Vec<T>, index :usize) -> Result<T, Err> {
         return Err(ERR_INVALID_INDEX);
     }
 }
-
-pub fn reset() {}

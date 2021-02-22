@@ -7,7 +7,7 @@ use super::super::util::{
 };
 use super::super::cpu::*;
 impl CPU {
-    pub fn add(&mut self, op : &Operand, mode : AddressingMode) {
+    pub fn adc(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
                 if let Operand::Byte(val) = op {
@@ -71,7 +71,7 @@ impl CPU {
         }
     }
 
-    pub fn sub(&mut self, op : &Operand, mode : AddressingMode) {
+    pub fn sbc(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
                 if let Operand::Byte(val) = op {
