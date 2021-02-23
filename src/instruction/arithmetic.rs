@@ -29,7 +29,7 @@ impl CPU {
     ///     - Zero
     ///     - Carry
     /// 
-    /// ## Note: In this implementation, the Overflow flag is not effected
+    /// ***Note:*** In this implementation, the Overflow flag is not effected
     pub fn adc(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -104,7 +104,7 @@ impl CPU {
     ///     - Zero
     ///     - Carry
     /// 
-    /// ## Note: In this implementation, the Overflow flag is not effected
+    /// ***Note***: In this implementation, the Overflow flag is not effected
     pub fn sbc(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
