@@ -1,14 +1,9 @@
-use crate::util::{
-    Operand,
-    AddressingMode,
-    change_endianness,
-    split_word,
-    make_word,
-};
+use crate::util::*;
 use super::errors::*;
+use super::instruction::compile::*;
+use super::instruction::instruction_table::MNEMONICS;
 
 pub struct CPU {
-    
     pub reg_a   : u8,
     pub reg_x   : u8,
     pub reg_y   : u8,
@@ -23,6 +18,64 @@ pub struct CPU {
 }
 
 impl CPU {
+    pub fn new() -> CPU {
+        let mut mem : Vec<u8> = Vec::new();
+        mem.fill(0);
+        
+        let mut ret = CPU {
+            reg_a   : 0,
+            reg_x   : 0,
+            reg_y   : 0,
+
+            pc      : 0,
+            stat    : 0,
+            sp      : 0,
+
+            mem     : mem,
+            int     : true,
+        };
+        ret.reset();
+        
+        ret
+    }
+
+    pub fn from(mem : Memory) -> CPU {
+        let mut ret = CPU {
+            reg_a   : 0,
+            reg_x   : 0,
+            reg_y   : 0,
+
+            pc      : 0,
+            stat    : 0,
+            sp      : 0,
+
+            mem     : mem,
+            int     : true,
+        };
+        ret.reset();
+        
+        ret
+    }
+
+    pub fn cycle(&mut self) -> Result<(),Err> {
+        let ptr = self.pc;
+        self.pc = self.pc.saturating_add(1);
+
+        let opcode = safe_remove(&mut self.mem, ptr as usize)?;
+        for mnem in MNEMONICS.iter() {
+            if mnem.opcode == opcode {
+                let op = get_operand(&mut self.mem, mnem.addr_mode)?;
+                let f = mnem.ofunc;
+                f(self, &op, mnem.addr_mode);
+            }
+        }
+
+        if ptr == 0xFFFF {
+            return Ok(());
+        }
+        return Ok(());
+    }
+
     pub fn load_vector(&mut self, low : u16, high : u16) {
         let l = self.mem[low as usize];
         let h = self.mem[high as usize];
@@ -203,4 +256,6 @@ impl CPU {
         
         return Ok(ret);
     }
+
+
 }

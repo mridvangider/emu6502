@@ -35,13 +35,13 @@ pub enum AddressingMode {
     IndirectIndexed,
 }
 
-pub type opfunc = fn(&mut CPU, &Operand, AddressingMode);
+pub type OPFUNC = fn(&mut CPU, &Operand, AddressingMode);
 
 pub struct Mnemonic {
     pub name:       &'static str,
     pub opcode:     u8,
     pub addr_mode:  AddressingMode,
-    pub ofunc:      opfunc,
+    pub ofunc:      OPFUNC,
 }
 
 pub struct Instruction<'a> {

@@ -10,7 +10,7 @@ use super::super::util::{
 use super::instruction_table::MNEMONICS;
 use crate::errors::*;
 
-fn decode_mnemonic<'a>(ocode: &u8) -> Option<&'a Mnemonic> {
+pub fn decode_mnemonic<'a>(ocode: &u8) -> Option<&'a Mnemonic> {
     for mnem in MNEMONICS.iter() {
         if mnem.opcode == *ocode {
             return Some(mnem);
@@ -19,7 +19,7 @@ fn decode_mnemonic<'a>(ocode: &u8) -> Option<&'a Mnemonic> {
     return None;
 }
 
-fn encode_operand(op: &Operand) -> Vec<u8> {
+pub fn encode_operand(op: &Operand) -> Vec<u8> {
     let mut ret: Vec<u8> = Vec::new();
     
     match op {
@@ -36,7 +36,7 @@ fn encode_operand(op: &Operand) -> Vec<u8> {
     return ret;
 }
 
-fn addr_mode_to_oprnd_size(mode: AddressingMode) -> usize {
+pub fn addr_mode_to_oprnd_size(mode: AddressingMode) -> usize {
     match mode {
         AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | 
         AddressingMode::Indirect | AddressingMode::AbsoluteIndexedY => 2,
@@ -46,7 +46,7 @@ fn addr_mode_to_oprnd_size(mode: AddressingMode) -> usize {
     }
 }
 
-fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Result<Operand, Err> {
+pub fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Result<Operand, Err> {
     match addr_mode_to_oprnd_size(mode) {
         0 => {
             return Ok(
@@ -75,7 +75,7 @@ fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Result<Operand, Err
     }
 }
 
-fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
+pub fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
     for m in MNEMONICS.iter() {
         if name == m.name {
             return Ok(m);
@@ -85,7 +85,7 @@ fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
     return Err(ERR_MNEMONIC_NOT_FOUND);
 }
 
-fn process_operand(op : &str, mode : AddressingMode) -> Result<Operand, Err> {
+pub fn process_operand(op : &str, mode : AddressingMode) -> Result<Operand, Err> {
     
     match mode {
         AddressingMode::Absolute => {

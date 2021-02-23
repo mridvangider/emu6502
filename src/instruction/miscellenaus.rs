@@ -1,13 +1,12 @@
 use crate::util::{
     AddressingMode,
-    Memory,
     Operand,
     FLAG_BREAK,
 };
 use crate::cpu::*;
 
 impl CPU {
-    pub fn brk (&mut self, op : &Operand, mode: AddressingMode) {
+    pub fn brk (&mut self, _op : &Operand, _mode: AddressingMode) {
         if let Result::Err(_) = self.push_stack_word(self.pc, true) {
             return;
         }
