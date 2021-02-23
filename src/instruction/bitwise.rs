@@ -1,3 +1,13 @@
+//! # emu6502::instruction::bitwise
+//! 
+//! This module contains the implementations of the following arithmetic functions:
+//!     - and : AND memory with accumulator
+//!     - ora : OR memory with accumulator
+//!     - eor : XOR memory with one
+//!     - asl : Arithmetic shift left one bit
+//!     - lsr : Logical shift right one bit
+//!     - rol : Rotate left one bit
+//!     - ror : Rotate right one bit
 use crate::util::{
     Operand,
     AddressingMode,
@@ -9,6 +19,13 @@ use crate::util::{
 use crate::cpu::*;
 
 impl CPU {
+    /// AND memory with accumulator
+    /// 
+    /// A & M -> A
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn and(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -39,6 +56,13 @@ impl CPU {
         }
     }
 
+    /// OR memory with accumulator
+    /// 
+    /// A | M -> A
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn ora(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -69,6 +93,13 @@ impl CPU {
         }
     }
 
+    /// XOR memory with accumulator
+    /// 
+    /// A ^ M -> A
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn eor(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -99,6 +130,14 @@ impl CPU {
         }
     }
 
+    /// Arithmetic shift left one bit
+    /// 
+    /// C <- B7 B6 B5 B4 B3 B2 B1 B0 <- 0
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
+    ///     - Carry
     pub fn asl(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Accumulator => {
@@ -139,6 +178,14 @@ impl CPU {
         }
     }
 
+    /// Logical shift right one bit
+    /// 
+    /// 0 -> B7 B6 B5 B4 B3 B2 B1 B0 -> C
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
+    ///     - Carry
     pub fn lsr(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Accumulator => {
@@ -179,6 +226,14 @@ impl CPU {
         }
     }
 
+    /// Rotate left one bit
+    /// 
+    /// C <- B7 B6 B5 B4 B3 B2 B1 B0 <- C
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
+    ///     - Carry
     pub fn rol(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Accumulator => {
@@ -225,6 +280,14 @@ impl CPU {
         }
     }
 
+    /// Rotate right one bit
+    /// 
+    /// C -> B7 B6 B5 B4 B3 B2 B1 B0 -> C
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
+    ///     - Carry
     pub fn ror(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Accumulator => {
