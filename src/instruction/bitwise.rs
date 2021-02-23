@@ -1,6 +1,6 @@
 //! # emu6502::instruction::bitwise
 //! 
-//! This module contains the implementations of the following arithmetic functions:
+//! This module contains the implementations of the following bitwise operation functions:
 //!     - and : AND memory with accumulator
 //!     - ora : OR memory with accumulator
 //!     - eor : XOR memory with one
