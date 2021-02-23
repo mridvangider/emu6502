@@ -1,3 +1,15 @@
+//! # emu6502::instruction::aritmetic
+//! 
+//! This module contains the implementations of the following arithmetic functions:
+//!     - adc : Add memory to accumulator with carry
+//!     - sbc : Substract memory from accumulator with carry
+//!     - inc : Increment memory by one
+//!     - inx : Increment Index X by one
+//!     - iny : Increment Index Y by one
+//!     - dec : Decrement memory by one
+//!     - dex : Decrement Index X by one
+//!     - dey : Decrement Index Y by one
+
 use super::super::util::{
     AddressingMode,
     Operand,
@@ -7,6 +19,17 @@ use super::super::util::{
 };
 use super::super::cpu::*;
 impl CPU {
+    /// Add memory to accumulator with carry
+    /// 
+    /// A + M + C -> A
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Overflow(*)
+    ///     - Zero
+    ///     - Carry
+    /// 
+    /// ## Note: In this implementation, the Overflow flag is not effected
     pub fn adc(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -71,6 +94,17 @@ impl CPU {
         }
     }
 
+    /// Subtract memory from accumulator with carry
+    /// 
+    /// A - M - ~C -> A
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Overflow(*)
+    ///     - Zero
+    ///     - Carry
+    /// 
+    /// ## Note: In this implementation, the Overflow flag is not effected
     pub fn sbc(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -135,6 +169,13 @@ impl CPU {
         }
     }
 
+    /// Increment memory by one
+    /// 
+    /// M + 1 -> M
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn inc(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
@@ -152,6 +193,13 @@ impl CPU {
         }
     }
 
+    /// Increment index X by one
+    /// 
+    /// X + 1 -> X
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn inx(&mut self, _op : &Operand, mode : AddressingMode) {
         if mode == AddressingMode::Implied {
             self.reg_x = self.reg_x.wrapping_add(1);
@@ -164,6 +212,13 @@ impl CPU {
         }
     }
 
+    /// Increment index Y by one
+    /// 
+    /// Y + 1 -> Y
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn iny(&mut self, _op : &Operand, mode : AddressingMode) {
         if mode == AddressingMode::Implied {
             self.reg_y = self.reg_y.wrapping_add(1);
@@ -176,6 +231,13 @@ impl CPU {
         }
     }
 
+    /// Decrement memory by one
+    /// 
+    /// M - 1 -> M
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn dec(&mut self, op : &Operand, mode : AddressingMode) {
         match mode {
             AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX | AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX => {
@@ -193,6 +255,13 @@ impl CPU {
         }
     }
 
+    /// Decrement index X by one
+    /// 
+    /// X - 1 -> X
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn dex(&mut self, _op : &Operand, mode : AddressingMode) {
         if mode == AddressingMode::Implied {
             self.reg_x = self.reg_x.wrapping_sub(1);
@@ -205,6 +274,13 @@ impl CPU {
         }
     }
 
+    /// Decrement index Y by one
+    /// 
+    /// Y - 1 -> Y
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn dey(&mut self, _op : &Operand, mode : AddressingMode) {
         if mode == AddressingMode::Implied {
             self.reg_y = self.reg_y.wrapping_sub(1);
