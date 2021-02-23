@@ -1,4 +1,4 @@
-//! # emu6502::instruction::aritmetic
+//! # emu6502::instruction::arithmetic
 //! 
 //! This module contains the implementations of the following arithmetic functions:
 //!     - adc : Add memory to accumulator with carry
