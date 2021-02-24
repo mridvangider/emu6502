@@ -1,5 +1,3 @@
-//! # emu6502::instruction::jump
-//! 
 //! This module contains the implementations of the following jump functions:
 //!     - jmp : Jump to a new location by changing the value of the program counter
 //!     - jsr : Jump to a subrouine

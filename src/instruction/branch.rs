@@ -1,5 +1,3 @@
-//! # emu6502::instruction::branch
-//! 
 //! This module contains the implementations of the following branch functions:
 //!     - bcc : Branch on carry clear
 //!     - bcs : Branch on carry set

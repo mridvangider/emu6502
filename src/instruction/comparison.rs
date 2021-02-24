@@ -1,5 +1,3 @@
-//! # emu6502::instruction::comparison
-//! 
 //! This module contains the implementations of the following comparison functions:
 //!     - cmp : Compare memory with accumulator
 //!     - cpx : Compare memory with index X

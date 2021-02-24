@@ -1,3 +1,10 @@
+//! This module contains the implementations of the following load&store functions:
+//!     - lda : Load accumulator with memory
+//!     - ldx : Load index X with memory
+//!     - ldy : Load index Y with memory
+//!     - sta : Store accumulator in memory
+//!     - stx : Store index X in memory
+//!     - sty : Store index Y in memory
 use crate::util::{
     Operand,
     AddressingMode,
@@ -8,6 +15,13 @@ use crate::util::{
 use crate::cpu::*;
 
 impl CPU {
+    /// Load accumulator with memory
+    /// 
+    /// M -> A
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn lda (&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -39,6 +53,13 @@ impl CPU {
         }
     }
 
+    /// Load index X with memory
+    /// 
+    /// M -> X
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn ldx (&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -70,6 +91,13 @@ impl CPU {
         }
     }
 
+    /// Load index Y with memory
+    /// 
+    /// M -> Y
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
     pub fn ldy (&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -101,6 +129,11 @@ impl CPU {
         }
     }
 
+    /// Store accumulator in memory
+    /// 
+    /// A -> M
+    /// 
+    /// Effected flags: None
     pub fn sta (&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | AddressingMode::AbsoluteIndexedY |
@@ -115,6 +148,11 @@ impl CPU {
         }
     }
 
+    /// Store index X in memory
+    /// 
+    /// X -> M
+    /// 
+    /// Effected flags: Node
     pub fn stx (&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Absolute | AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedY => {
@@ -128,6 +166,11 @@ impl CPU {
         }
     }
 
+    /// Store index Y in memory
+    /// 
+    /// y -> M
+    /// 
+    /// Effected flags: None
     pub fn sty (&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Absolute | AddressingMode::ZeroPage | AddressingMode::ZeroPageIndexedX => {
