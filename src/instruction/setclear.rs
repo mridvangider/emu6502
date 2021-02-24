@@ -1,3 +1,11 @@
+//! This module contains the implementations of the following set&clear functions:
+//!     - clc : Clear carry
+//!     - sec : Set carry
+//!     - cld : Clear decimal
+//!     - sed : Set decimal
+//!     - cli : Clear interrupt
+//!     - sei : Set interrupt
+//!     - clv : Clear overflow
 use crate::util::{
     AddressingMode,
     Operand,
