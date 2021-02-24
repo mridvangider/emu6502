@@ -235,7 +235,7 @@ impl CPU {
         }
     }
 
-    pub fn pop_stack_word(&mut self,little_endian: bool) -> Result<u16,Err> {
+    pub fn pop_stack_word(&mut self,big_endian: bool) -> Result<u16,Err> {
         let mut ret: u16;
         let (low, high) : (u8,u8);
         match self.pop_stack_byte() {
@@ -250,7 +250,7 @@ impl CPU {
 
         ret = make_word(&low, &high);
 
-        if little_endian {
+        if big_endian {
             ret = change_endianness(&ret);
         }
         
