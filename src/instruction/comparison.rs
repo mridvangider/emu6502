@@ -1,3 +1,18 @@
+//! # emu6502::instruction::comparison
+//! 
+//! This module contains the implementations of the following comparison functions:
+//!     - cmp : Compare memory with accumulator
+//!     - cpx : Compare memory with index X
+//!     - cpy : Compare memory with index Y
+//!     - bit : Test bits in memory with accumulator
+//! 
+//! ## Comparison Table
+//! 
+//! |   **Condition**   | **N** | **Z** | **C** |
+//! | ----------------- | ----- | ----- | ----- |
+//! | Register < Memory |   1   |   0   |   0   |
+//! | Register = Memory |   0   |   1   |   1   |
+//! | Register > Memory |   0   |   0   |   1   |
 use crate::util::{
     Operand,
     AddressingMode,
@@ -10,6 +25,14 @@ use crate::util::{
 use crate::cpu::*;
 
 impl CPU {
+    /// Compare memory with accumulator
+    /// 
+    /// A - M
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero 
+    ///     - Carry
     pub fn cmp(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -41,6 +64,14 @@ impl CPU {
         }
     }
 
+    /// Compare memory with index X
+    /// 
+    /// X - M
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero 
+    ///     - Carry
     pub fn cpx(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -70,6 +101,14 @@ impl CPU {
         }
     }
 
+    /// Compare memory with index Y
+    /// 
+    /// Y - M
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero 
+    ///     - Carry
     pub fn cpy(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Immediate => {
@@ -99,6 +138,14 @@ impl CPU {
         }
     }
 
+    /// Test bits memory with accumulator
+    /// 
+    /// A&M
+    /// 
+    /// Effected flags:
+    ///     - Negative
+    ///     - Zero
+    ///     - Carry
     pub fn bit(&mut self, op : &Operand, mode: AddressingMode) {
         match mode {
             AddressingMode::Absolute | AddressingMode::ZeroPage => {
