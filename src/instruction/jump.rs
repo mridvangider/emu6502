@@ -26,8 +26,8 @@ impl CPU {
 
     /// Jump to a subroutine. The address of the next instruction is pushed to the stack
     /// 
-    /// PCH -> SP
-    /// PCL -> SP+1
+    /// PCH -> (SP)
+    /// PCL -> (SP+1)
     /// M -> PC
     /// 
     /// Effected flags: None
