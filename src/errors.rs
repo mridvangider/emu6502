@@ -10,3 +10,4 @@ pub const ERR_INVALID_LINE : Err = 7;
 pub const ERR_MNEMONIC_NOT_FOUND : Err = 8;
 pub const ERR_NO_VALID_OPERAND : Err = 9;
 pub const ERR_INVALID_INDEX : Err = 10;
+pub const ERR_INVALID_OPCDOE : Err = 11;

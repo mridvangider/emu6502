@@ -10,13 +10,13 @@ use super::super::util::{
 use super::instruction_table::MNEMONICS;
 use crate::errors::*;
 
-pub fn decode_mnemonic<'a>(ocode: &u8) -> Option<&'a Mnemonic> {
+pub fn decode_mnemonic<'a>(ocode: u8) -> Result<&'a Mnemonic, Err> {
     for mnem in MNEMONICS.iter() {
-        if mnem.opcode == *ocode {
-            return Some(mnem);
+        if mnem.opcode == ocode {
+            return Ok(mnem);
         }
     }
-    return None;
+    return Err(ERR_INVALID_OPCDOE);
 }
 
 pub fn encode_operand(op: &Operand) -> Vec<u8> {
