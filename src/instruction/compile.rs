@@ -10,6 +10,7 @@ use super::super::util::{
 use super::instruction_table::MNEMONICS;
 use crate::errors::*;
 
+/// Given a byte, returns the mnemonic with corresponding opcode.
 pub fn decode_mnemonic<'a>(ocode: u8) -> Result<&'a Mnemonic, Err> {
     for mnem in MNEMONICS.iter() {
         if mnem.opcode == ocode {
@@ -19,6 +20,9 @@ pub fn decode_mnemonic<'a>(ocode: u8) -> Result<&'a Mnemonic, Err> {
     return Err(ERR_INVALID_OPCDOE);
 }
 
+/// Turns an operand into a sequence of bytes. If the operand is 1-byte long,
+/// then returns vector with that byte. If the operand is 2-byte long,
+/// then returns vector with those 2 bytes in little endian format.
 pub fn encode_operand(op: &Operand) -> Vec<u8> {
     let mut ret: Vec<u8> = Vec::new();
     
@@ -36,6 +40,7 @@ pub fn encode_operand(op: &Operand) -> Vec<u8> {
     return ret;
 }
 
+/// For each addressing mode, returns the requiered the operand size in bytes.
 pub fn addr_mode_to_oprnd_size(mode: AddressingMode) -> usize {
     match mode {
         AddressingMode::Absolute | AddressingMode::AbsoluteIndexedX | 
@@ -46,6 +51,7 @@ pub fn addr_mode_to_oprnd_size(mode: AddressingMode) -> usize {
     }
 }
 
+/// From a string of bytes, removes an operand from the beginning and returns it.
 pub fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Result<Operand, Err> {
     match addr_mode_to_oprnd_size(mode) {
         0 => {
@@ -75,6 +81,7 @@ pub fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Result<Operand,
     }
 }
 
+/// Finds the corresponding Mnemonic from the given string.
 pub fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
     for m in MNEMONICS.iter() {
         if name == m.name {
@@ -85,38 +92,33 @@ pub fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
     return Err(ERR_MNEMONIC_NOT_FOUND);
 }
 
-pub fn process_operand(op : &str, mode : AddressingMode) -> Result<Operand, Err> {
-    
-    match mode {
-        AddressingMode::Absolute => {
-            if op.len() == 5 {
-                if op.starts_with('$') {
-                    match &op[1..5].parse::<u16>() {
-                        Ok(addr) => Ok(Operand::Word(*addr)),
-                        Err(_) => Err(ERR_PARSE_ERROR)
-                    }
-                } else {
-                    return Err(ERR_OPERAND_WRONG_FORMAT);
-                }
-            } else {
-                return Err(ERR_OPERAND_SIZE_INVALID);
+/// Turns a string into an operand.
+pub fn process_operand(op : &str) -> Result<Operand, Err> {
+    if op.len() == 5 {
+        if op.starts_with('$') {
+            match &op[1..5].parse::<u16>() {
+                Ok(addr) => Ok(Operand::Word(*addr)),
+                Err(_) => Err(ERR_PARSE_ERROR)
             }
-        },
-        AddressingMode::AbsoluteIndexedX => {
-            if op.len() == 9 {                                  
-                if op.starts_with("($") && op.ends_with(",X)") {
-                    match &op[2..6].parse::<u16>() {
-                        Ok(addr) => Ok(Operand::Word(*addr)),
-                        Err(_) => Err(ERR_PARSE_ERROR)
-                    }
-                } else {
-                    return Err(ERR_OPERAND_WRONG_FORMAT);
-                }
-            } else {
-                return Err(ERR_OPERAND_SIZE_INVALID);
-            }
+        } else {
+            return Err(ERR_OPERAND_WRONG_FORMAT);
         }
-        _ => Ok(Operand::Null)
+    } else if op.len() == 9 {                                  
+        if op.starts_with("($") && op.ends_with(",X)") {
+            match &op[2..6].parse::<u16>() {
+                Ok(addr) => Ok(Operand::Word(*addr)),
+                Err(_) => Err(ERR_PARSE_ERROR)
+            }
+        } else if op.starts_with("($") && op.ends_with("),Y") {
+            match &op[2..6].parse::<u16>() {
+                Ok(addr) => Ok(Operand::Word(*addr)),
+                Err(_) => Err(ERR_PARSE_ERROR)
+            }
+        }else {
+            return Err(ERR_OPERAND_WRONG_FORMAT);
+        }
+    } else {
+        return Err(ERR_OPERAND_SIZE_INVALID);
     }
 }
 /*
