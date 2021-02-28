@@ -81,6 +81,7 @@ pub fn get_operand(bytes: &mut Vec<u8>, mode: AddressingMode) -> Result<Operand,
     }
 }
 
+/*
 /// Finds the corresponding Mnemonic from the given string.
 pub fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
     for m in MNEMONICS.iter() {
@@ -94,34 +95,9 @@ pub fn find_mnemonic_by_name<'a> (name : &str) -> Result<&'a Mnemonic, Err> {
 
 /// Turns a string into an operand.
 pub fn process_operand(op : &str) -> Result<Operand, Err> {
-    if op.len() == 5 {
-        if op.starts_with('$') {
-            match &op[1..5].parse::<u16>() {
-                Ok(addr) => Ok(Operand::Word(*addr)),
-                Err(_) => Err(ERR_PARSE_ERROR)
-            }
-        } else {
-            return Err(ERR_OPERAND_WRONG_FORMAT);
-        }
-    } else if op.len() == 9 {                                  
-        if op.starts_with("($") && op.ends_with(",X)") {
-            match &op[2..6].parse::<u16>() {
-                Ok(addr) => Ok(Operand::Word(*addr)),
-                Err(_) => Err(ERR_PARSE_ERROR)
-            }
-        } else if op.starts_with("($") && op.ends_with("),Y") {
-            match &op[2..6].parse::<u16>() {
-                Ok(addr) => Ok(Operand::Word(*addr)),
-                Err(_) => Err(ERR_PARSE_ERROR)
-            }
-        }else {
-            return Err(ERR_OPERAND_WRONG_FORMAT);
-        }
-    } else {
-        return Err(ERR_OPERAND_SIZE_INVALID);
-    }
+    
 }
-/*
+
 pub fn compile_line(code: &str) -> Result<Instruction,Err> {
     match code.lines().next() {
         Some(line) => {
