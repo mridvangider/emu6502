@@ -18,6 +18,7 @@ pub struct CPU {
 }
 
 impl CPU {
+    /// Create a new CPU object with zero filled memory.
     pub fn new() -> CPU {
         let mut mem : Vec<u8> = Vec::new();
         mem.fill(0);
@@ -39,6 +40,10 @@ impl CPU {
         ret
     }
 
+    /// Create a new CPU object with the provided memory object.
+    /// 
+    /// Note that the returning CPU object takes the ownership of
+    /// the memory object.
     pub fn from(mem : Memory) -> CPU {
         let mut ret = CPU {
             reg_a   : 0,
@@ -57,6 +62,11 @@ impl CPU {
         ret
     }
 
+    /// Simulates a cpu cycle. 
+    /// 
+    /// This is different from the way 6502 cycle actually works. 
+    /// Usually, instructions requires multiple cycles to complete. 
+    /// Here, we complete everything in a single cycle for simplicity.
     pub fn cycle(&mut self) -> Result<(),Err> {
         let ptr = self.pc;
         self.pc = self.pc.saturating_add(1);
@@ -76,16 +86,34 @@ impl CPU {
         return Ok(());
     }
 
+    /// Reads a word from the addresses low,high into the program counter.
+    /// 
+    /// Example: Suppose we have 
+    /// 
+    ///  0xFFF0     00 00 00 00 00 00 00 00    00 00 00 00 00 AB CD 00
+    /// 
+    /// Then 
+    /// 
+    /// `load_vector(0xFFFD,0xFFFE)` 
+    /// 
+    /// puts **ABCD** into the program counter.
     pub fn load_vector(&mut self, low : u16, high : u16) {
         let l = self.mem[low as usize];
         let h = self.mem[high as usize];
         self.pc = make_word(&l, &h);
     }
 
+    /// Simulates the RESET signal.
+    /// 
+    /// Loads the vector at 0xFFFC,0xFFFD into the program counter.
     pub fn reset(&mut self) {
         self.load_vector(0xFFFC, 0xFFFD);
     }
 
+    /// Simulates the NMI signal.
+    /// 
+    /// Pushes the program counter and the processor status register 
+    /// onto the stack, disables interrupts and the loads vector at 0xFFFA,0xFFFB.
     pub fn nmi(&mut self) {
         if let Result::Err(_) = self.push_stack_word(self.pc, true) {
             return;
@@ -99,6 +127,10 @@ impl CPU {
         self.load_vector(0xFFFA, 0xFFFB);
     }
 
+    /// Simulates the IRQ signal.
+    /// 
+    /// Pushes the program counter and the processor status register 
+    /// onto the stack, disables interrupts and loads the vector at 0xFFFE,0xFFFF.
     pub fn irq(&mut self) {
         if let Result::Err(_) = self.push_stack_word(self.pc, true) {
             return;
@@ -112,6 +144,7 @@ impl CPU {
         self.load_vector(0xFFFE, 0xFFFF);
     }
 
+    /// From provided operand, returns a *usize* according to the addresing mode.
     pub fn calculate_address(&self, op: &Operand, mode: AddressingMode) -> Option<usize> {
         let mut ret: usize;
         match mode {
@@ -194,6 +227,7 @@ impl CPU {
         }
     }
 
+    /// Pushes a byte onto the stack
     pub fn push_stack_byte(&mut self, val: u8) -> Result<(),Err> {
         if self.sp > 0 {
             self.sp -= 1;
@@ -205,6 +239,10 @@ impl CPU {
         }
     }
 
+    /// Pushes a word onto the stack.
+    /// 
+    /// First the low byte, then the second byte is pushed. If `little_endian` is true,
+    /// the order is reversed.
     pub fn push_stack_word(&mut self, word: u16, little_endian: bool) -> Result<(),Err> {
         let mut val = word;
         
@@ -224,6 +262,7 @@ impl CPU {
         return Ok(());
     }
 
+    /// Pops a byte from the top of the stack
     pub fn pop_stack_byte(&mut self) -> Result<u8,Err> {
         if self.sp < 0xFF {
             let addr = 0x0100 + self.sp as usize;
@@ -235,6 +274,10 @@ impl CPU {
         }
     }
 
+    /// Pops a word from the stack.
+    /// 
+    /// First the high byte, then the low byte is popped. If `big_endian` is true,
+    /// the order is reversed.
     pub fn pop_stack_word(&mut self,big_endian: bool) -> Result<u16,Err> {
         let mut ret: u16;
         let (low, high) : (u8,u8);
